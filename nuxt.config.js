@@ -27,8 +27,17 @@ export default {
   buildModules: [],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["bootstrap-vue/nuxt"],
+  modules: ["bootstrap-vue/nuxt", "@nuxtjs/axios"],
 
+  //axios configuration
+  axios: {
+    baseURL: "https://6315b87333e540a6d382b859.mockapi.io/", // Used as fallback if no runtime config is provided
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    debug: true,
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 };

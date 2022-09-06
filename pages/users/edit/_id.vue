@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <h2>quanquan12</h2>
-    <nuxt />
-  </div>
+  <div class="mt-4">this is edit id {{$route.params.id}}</div>
 </template>
 <script>
 export default {};
