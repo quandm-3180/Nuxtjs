@@ -2,7 +2,7 @@
   <div>
     <h3 class="my-3">Edit User</h3>
     <b-alert v-model="success" variant="success" dismissible>Edit success</b-alert>
-    <b-alert v-model="error" variant="danger" dismissible>Please fill in all fields</b-alert>
+    <b-alert v-model="error" variant="danger" dismissible>{{messageError}}</b-alert>
 
     <b-form @submit.prevent="submitUpdateUser(id)">
       <b-form-group id="input-group-1" label="Name:" label-for="name">
@@ -29,7 +29,11 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   data() {
-    return { success: false, error: false };
+    return {
+      success: false,
+      error: false,
+      messageError: null
+    };
   },
 
   async asyncData({ store, error, params }) {
@@ -55,13 +59,21 @@ export default {
       }
     },
 
-    name: {
-      set(name) {
-        this.$store.commit("GET_USER", { name });
-      },
-      get() {
-        return this.user.name;
-      }
+    // name: {
+    //   set(name) {
+    //     this.$store.commit("GET_USER", { name });
+    //   },
+    //   get() {
+    //     return this.user.name;
+    //   }
+    // },
+    // name: function() {
+    //   console.log(3);
+    //   // `this` points to the vm instance
+    //   return this.$store.state.user.name;
+    // },
+    name() {
+      return this.user.name;
     },
 
     address: {
@@ -86,7 +98,7 @@ export default {
   methods: {
     ...mapActions(["putUser"]),
     submitUpdateUser(id) {
-      if (this.validateForm()) {
+      if (!this.validateForm()) {
         const that = this;
         this.putUser(id)
           .then(response => {
@@ -106,7 +118,13 @@ export default {
     },
 
     validateForm() {
-      if (this.name && this.address && this.old) {
+      if (!this.name || !this.address || !this.old) {
+        this.messageError = "Please fill in all fields";
+        return false;
+      } else if (!isNaN(this.old)) {
+        this.messageError = "The old not number";
+        return false;
+      } else {
         return true;
       }
     }
