@@ -36,9 +36,14 @@ export default {
 
     submitDeleteUser(id) {
       this.deleteUser(id);
-      console.log(id);
       this.$router.push("/users");
     }
+  },
+
+  head() {
+    return {
+      title: "Delete User"
+    };
   }
 };
 </script>

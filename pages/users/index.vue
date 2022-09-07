@@ -27,7 +27,13 @@ export default {
 
   computed: mapState({
     users: state => state.users
-  })
+  }),
+
+  head() {
+    return {
+      title: "List user"
+    };
+  }
 };
 </script>
 <style>
