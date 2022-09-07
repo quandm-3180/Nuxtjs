@@ -7,7 +7,7 @@ export const state = () => ({
 
 export const mutations = {
   SET_USERS(state, users) {
-    state.users = users;
+    state.users = users.reverse();
   },
   SET_USER(state, user) {
     state.user = user;
@@ -17,7 +17,11 @@ export const mutations = {
     state.users.splice(index, 1);
   },
   CREATE_USER(state, user) {
-    state.users.push(user);
+    state.users.unshift(user);
+  },
+
+  GET_USER(state, user) {
+    state.user = Object.assign({}, state.user, user);
   },
 };
 
@@ -39,7 +43,10 @@ export const actions = {
 
   async addUser({ commit }, user) {
     await apiService.createUser(user);
-    console.log(user);
-    // commit("CREATE_USER", user);
+    commit("CREATE_USER", user);
+  },
+
+  async putUser({ state }, id) {
+    await apiService.putUser(id, state.user);
   },
 };

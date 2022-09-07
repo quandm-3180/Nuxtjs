@@ -1,11 +1,10 @@
 <template>
   <div class="shadow">
-    <nuxt-link :to="'/users/' + user.id">
-      <b class="h4 text-dark">Name: {{user.name}} / Address: {{user.address}} / Old: {{user.old}}</b>
-    </nuxt-link>
+    <b class="h4 text-dark">Name: {{user.name}} / Address: {{user.address}} / Old: {{user.old}}</b>
+
     <span class="float-right">
       <nuxt-link :to="'/users/edit/' + user.id">Edit</nuxt-link>&nbsp;
-      <nuxt-link :to="'/users/delete/' + user.id">Delete</nuxt-link>
+      <nuxt-link :to="'/users/delete/' + user.id" class="text-danger">Delete</nuxt-link>
     </span>
   </div>
 </template>
