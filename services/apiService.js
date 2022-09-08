@@ -27,6 +27,7 @@ export default {
   },
 
   putUser(id, user) {
+    // console.log(id);
     return apiClient.put("/users/" + id, user);
   },
 };

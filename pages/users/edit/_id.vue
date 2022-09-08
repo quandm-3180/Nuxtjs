@@ -2,9 +2,9 @@
   <div>
     <h3 class="my-3">Edit User</h3>
     <b-alert v-model="success" variant="success" dismissible>Edit success</b-alert>
-    <b-alert v-model="error" variant="danger" dismissible>Please fill in all fields</b-alert>
+    <b-alert v-model="error" variant="danger" dismissible>{{messageError}}</b-alert>
 
-    <b-form @submit.prevent="submitUpdateUser(id)">
+    <b-form @submit.prevent="submitUpdateUser()">
       <b-form-group id="input-group-1" label="Name:" label-for="name">
         <b-form-input v-model="name" id="name" type="text" placeholder="Nhap ten de"></b-form-input>
       </b-form-group>
@@ -29,10 +29,17 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   data() {
-    return { success: false, error: false };
+    return {
+      success: false,
+      error: false,
+      messageError: null,
+      name: "",
+      address: "",
+      old: ""
+    };
   },
 
-  async asyncData({ store, error, params }) {
+  async fetch({ store, error, params }) {
     try {
       await store.dispatch("fetchUser", params.id);
     } catch (e) {
@@ -43,52 +50,33 @@ export default {
     }
   },
 
+  mounted() {
+    this.name = this.user.name;
+    this.address = this.user.address;
+    this.old = this.user.old;
+  },
+
   computed: {
-    ...mapState(["user"]),
-
-    id: {
-      set(id) {
-        this.$store.commit("GET_USER", { id });
-      },
-      get() {
-        return this.user.id;
-      }
-    },
-
-    name: {
-      set(name) {
-        this.$store.commit("GET_USER", { name });
-      },
-      get() {
-        return this.user.name;
-      }
-    },
-
-    address: {
-      set(address) {
-        this.$store.commit("GET_USER", { address });
-      },
-      get() {
-        return this.user.address;
-      }
-    },
-
-    old: {
-      set(old) {
-        this.$store.commit("GET_USER", { old });
-      },
-      get() {
-        return this.user.old;
-      }
-    }
+    ...mapState(["user"])
   },
 
   methods: {
     ...mapActions(["putUser"]),
-    submitUpdateUser(id) {
+    submitUpdateUser() {
       if (this.validateForm()) {
         const that = this;
-        this.putUser(id)
+        const user = {
+          name: this.name,
+          address: this.address,
+          old: this.old
+        };
+
+        const params = {
+          id: this.$route.params.id,
+          user
+        };
+
+        this.putUser(params)
           .then(response => {
             this.error = false;
             this.success = true;
@@ -106,7 +94,13 @@ export default {
     },
 
     validateForm() {
-      if (this.name && this.address && this.old) {
+      if (!this.name || !this.address || !this.old) {
+        this.messageError = "Please fill in all fields";
+        return false;
+      } else if (isNaN(this.old)) {
+        this.messageError = "The old not number";
+        return false;
+      } else {
         return true;
       }
     }

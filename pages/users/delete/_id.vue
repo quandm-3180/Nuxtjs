@@ -7,7 +7,7 @@
     </p>
     <form @submit.prevent="submitDeleteUser(user.id)">
       <input type="submit" class="btn btn-info" value="Delete" />
-      <nuxt-link to="/users">Canncel</nuxt-link>
+      <nuxt-link to="/users">Cancel</nuxt-link>
     </form>
   </div>
 </template>

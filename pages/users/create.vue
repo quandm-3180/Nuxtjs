@@ -2,7 +2,7 @@
   <div>
     <h3 class="my-3">Create User</h3>
     <b-alert v-model="success" variant="success" dismissible>Create success</b-alert>
-    <b-alert v-model="error" variant="danger" dismissible>Please fill in all fields</b-alert>
+    <b-alert v-model="error" variant="danger" dismissible>{{messageError}}</b-alert>
 
     <b-form @submit.prevent="submitCreateUser">
       <b-form-group id="input-group-1" label="Name:" label-for="name">
@@ -34,7 +34,8 @@ export default {
       address: null,
       old: null,
       success: false,
-      error: false
+      error: false,
+      messageError: null
     };
   },
   methods: {
@@ -59,8 +60,15 @@ export default {
         this.error = true;
       }
     },
+
     validateForm() {
-      if (this.name && this.address && this.old) {
+      if (!this.name || !this.address || !this.old) {
+        this.messageError = "Please fill in all fields";
+        return false;
+      } else if (isNaN(this.old)) {
+        this.messageError = "The old not number";
+        return false;
+      } else {
         return true;
       }
     }
