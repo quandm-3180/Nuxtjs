@@ -23,6 +23,11 @@ export const mutations = {
   GET_USER(state, user) {
     state.user = Object.assign({}, state.user, user);
   },
+
+  UPDATE_USER(state, user) {
+    const index = state.users.findIndex((item) => item.id === user.id);
+    state.users[index] = user;
+  },
 };
 
 export const actions = {
@@ -46,7 +51,8 @@ export const actions = {
     commit("CREATE_USER", user);
   },
 
-  async putUser({ state }, id) {
-    await apiService.putUser(id, state.user);
+  async putUser({ commit }, { id, user }) {
+    const response = await apiService.putUser(id, user);
+    commit("UPDATE_USER", response.data);
   },
 };
